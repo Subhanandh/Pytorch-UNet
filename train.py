@@ -96,9 +96,9 @@ def train_net(net,
             print('Validation Dice Coeff: {}'.format(val_dice))
 
         if save_cp:
-            torch.save(net.state_dict(),
-                       dir_checkpoint + 'CP{}.pth'.format(epoch + 1))
+            torch.save(net.state_dict(), dir_checkpoint + 'CP{}.pth'.format(epoch + 1))
             print('Checkpoint {} saved !'.format(epoch + 1))
+            print(dir_checkpoint + 'CP{}.pth'.format(epoch + 1))
 
 
 

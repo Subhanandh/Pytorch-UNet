@@ -11,6 +11,7 @@ def eval_net(net, dataset, gpu=False):
     for i, b in enumerate(dataset):
         img = b[0]
         true_mask = b[1]
+        true_mask *= 255.0/true_mask.max()
 
         img = torch.from_numpy(img).unsqueeze(0)
         true_mask = torch.from_numpy(true_mask).unsqueeze(0)

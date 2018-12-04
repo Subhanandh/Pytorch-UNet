@@ -21,9 +21,9 @@ def train_net(net,
               gpu=False,
               img_scale=0.5):
 
-    dir_img = 'data/train/'
-    dir_mask = 'data/train_masks/'
-    dir_checkpoint = 'checkpoints/'
+    dir_img = 'Pytorch-UNet/data/train/'
+    dir_mask = 'Pytorch-UNet/data/train_masks/'
+    dir_checkpoint = 'Pytorch-UNet/checkpoints/'
 
     ids = get_ids(dir_img)
     ids = split_ids(ids)

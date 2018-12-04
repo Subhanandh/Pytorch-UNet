@@ -64,7 +64,8 @@ def train_net(net,
         for i, b in enumerate(batch(train, batch_size)):
             imgs = np.array([i[0] for i in b]).astype(np.float32)
             true_masks = np.array([i[1] for i in b])
-            true_masks *= 255.0/true_masks.max()
+            true_masks = (true_masks - np.min(true_masks))/np.ptp(true_masks)
+            #true_masks *= 255.0/true_masks.max()
             print(true_masks)
 
             imgs = torch.from_numpy(imgs)

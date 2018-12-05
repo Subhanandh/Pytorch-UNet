@@ -92,7 +92,9 @@ def train_net(net,
         print('Epoch finished ! Loss: {}'.format(epoch_loss / i))
 
         if 1:
+            train_dice = eval_net(net, train, gpu)
             val_dice = eval_net(net, val, gpu)
+            print('Train Dice Coeff: {}'.format(train_dice))
             print('Validation Dice Coeff: {}'.format(val_dice))
 
         if save_cp:

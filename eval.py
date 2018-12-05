@@ -11,6 +11,7 @@ def eval_net(net, dataset, gpu=False):
     tot = 0
     print(dataset)
     for i, b in enumerate(dataset):
+        print('test ', i)
         img = b[0]
         true_mask = b[1]
         #true_mask *= 255.0/true_mask.max()

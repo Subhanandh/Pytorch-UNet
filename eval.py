@@ -9,7 +9,6 @@ def eval_net(net, dataset, gpu=False):
     """Evaluation without the densecrf with the dice coefficient"""
     net.eval()
     tot = 0
-    print(dataset)
     for i, b in enumerate(dataset):
         print('test ', i)
         img = b[0]

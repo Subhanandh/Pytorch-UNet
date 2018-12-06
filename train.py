@@ -90,8 +90,10 @@ def train_net(net,
             optimizer.step()
 
             dice_total += dice_coeff(masks_pred, true_masks).item()
+            if i == O:
+              i = 1
 
-        train_dice = dice_total / (batch_size * i)
+        train_dice = dice_total / i
         print('Epoch finished ! Loss: {}'.format(epoch_loss / i))
 
         if 1:

@@ -11,6 +11,7 @@ from torch import optim
 from eval import eval_net
 from unet import UNet
 from utils import get_ids, split_ids, split_train_val, get_imgs_and_masks, batch
+from dice_loss import dice_coeff
 
 def train_net(net,
               epochs=5,
@@ -21,9 +22,9 @@ def train_net(net,
               gpu=False,
               img_scale=0.5):
 
-    dir_img = 'Pytorch-UNet/data/train/'
-    dir_mask = 'Pytorch-UNet/data/train_masks/'
-    dir_checkpoint = 'Pytorch-UNet/checkpoints/'
+    dir_img = 'data/train/'
+    dir_mask = 'data/train_masks/'
+    dir_checkpoint = 'checkpoints/'
 
     ids = get_ids(dir_img)
     ids = split_ids(ids)
@@ -57,16 +58,15 @@ def train_net(net,
 
         # reset the generators
         train = get_imgs_and_masks(iddataset['train'], dir_img, dir_mask, img_scale)
+        train_to_eval = get_imgs_and_masks(iddataset['train'], dir_img, dir_mask, img_scale)
         val = get_imgs_and_masks(iddataset['val'], dir_img, dir_mask, img_scale)
 
         epoch_loss = 0
-
+        dice_total = 0
         for i, b in enumerate(batch(train, batch_size)):
             imgs = np.array([i[0] for i in b]).astype(np.float32)
             true_masks = np.array([i[1] for i in b])
             true_masks = (true_masks - np.min(true_masks))/np.ptp(true_masks)
-            #true_masks *= 255.0/true_masks.max()
-            #print(true_masks)
 
             imgs = torch.from_numpy(imgs)
             true_masks = torch.from_numpy(true_masks)
@@ -89,10 +89,12 @@ def train_net(net,
             loss.backward()
             optimizer.step()
 
+            dice_total += dice_coeff(masks_pred, true_masks).item()
+
+        train_dice = dice_total / (batch_size * i)
         print('Epoch finished ! Loss: {}'.format(epoch_loss / i))
 
         if 1:
-            train_dice = eval_net(net, train, gpu)
             val_dice = eval_net(net, val, gpu)
             print('Train Dice Coeff: {}'.format(train_dice))
             print('Validation Dice Coeff: {}'.format(val_dice))
